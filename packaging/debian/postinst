@@ -1,0 +1,36 @@
+#!/bin/bash
+set -e
+
+# 1. Обновляем системную базу десктоп-файлов
+if which update-desktop-database >/dev/null 2>&1; then
+    update-desktop-database -q /usr/share/applications
+fi
+
+echo "Configuring Caja PDF Optimizer v2.0.2..."
+
+# 2. ОЧИСТКА ДУБЛИКАТОВ
+echo "Scanning for legacy versions..."
+for user_dir in /home/*; do
+    if [ -d "$user_dir" ]; then
+        USER_ACTIONS_DIR="$user_dir/.local/share/file-manager/actions"
+        if [ -d "$USER_ACTIONS_DIR" ]; then
+            rm -f "$USER_ACTIONS_DIR"/optimize_pdf_*.desktop
+            rm -f "$USER_ACTIONS_DIR"/gimp*.desktop
+            rm -f "$USER_ACTIONS_DIR"/opt_pdf_*.desktop
+        fi
+        USER_SCRIPTS_DIR="$user_dir/.config/caja/scripts"
+        if [ -d "$USER_SCRIPTS_DIR" ]; then
+             rm -f "$USER_SCRIPTS_DIR/Оптимизировать PDF"*
+             rm -f "$USER_SCRIPTS_DIR/Optimize PDF"*
+             rm -f "$USER_SCRIPTS_DIR/OptimizePDF"
+        fi
+    fi
+done
+
+echo "---------------------------------------------------------"
+echo "Caja PDF Optimizer v2.0.2 installed successfully!"
+echo "Documentation available at: /usr/share/doc/caja-pdf-optimizer/README.md"
+echo ""
+echo "Please restart Caja:"
+echo "  caja -q"
+echo "---------------------------------------------------------"

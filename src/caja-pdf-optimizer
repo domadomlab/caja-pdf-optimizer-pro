@@ -1,0 +1,91 @@
+#!/bin/bash
+# ==============================================================================
+# Universal PDF Optimizer (ImageMagick)
+# ==============================================================================
+# Использование: ./pdf_optimizer.sh [DPI] [FILES...]
+# Если первый аргумент число - это DPI. Иначе DPI=200.
+# ==============================================================================
+
+LOG_FILE="/tmp/pdf_optimizer.log"
+DEFAULT_DPI=200
+SUFFIX="_opt"
+
+# Экспорт дисплея для GUI уведомлений
+export DISPLAY="${DISPLAY:-:0}"
+
+# --- Парсинг аргументов ---
+# Проверяем, является ли первый аргумент числом (DPI)
+if [[ "$1" =~ ^[0-9]+$ ]]; then
+    DPI="$1"
+    shift # Сдвигаем аргументы, чтобы остались только файлы
+else
+    DPI=$DEFAULT_DPI
+fi
+
+SUFFIX="_${DPI}dpi"
+
+# Функция лог+уведомление
+log_notify() {
+    local MSG="$1"
+    local TYPE="$2" # gui, error, info
+    echo "[$(date '+%H:%M:%S')] $MSG" >> "$LOG_FILE"
+    
+    if [ "$TYPE" == "gui" ]; then
+        notify-send -i "application-pdf" "PDF Optimizer ($DPI DPI)" "$MSG" 2>/dev/null || \
+        zenity --notification --text="$MSG" 2>/dev/null
+elif [ "$TYPE" == "error" ]; then
+     notify-send -u critical -i "dialog-error" "PDF Optimizer Error" "$MSG" 2>/dev/null
+fi
+}
+
+# Проверка зависимостей
+if ! command -v convert &> /dev/null; then
+    log_notify "ImageMagick не установлен (команда convert)!" "error"
+    exit 1
+fi
+
+log_notify "=== Старт: $DPI DPI, Файлов: $# ==="
+
+# Обработка файлов
+for INPUT_FILE in "$@"; do
+    if [ ! -f "$INPUT_FILE" ]; then
+        continue
+    fi
+
+    DIRNAME=$(dirname "$INPUT_FILE")
+    BASENAME=$(basename "$INPUT_FILE" .pdf)
+    OUTPUT_FILE="${DIRNAME}/${BASENAME}${SUFFIX}.pdf"
+
+    log_notify "Обработка: $(basename "$INPUT_FILE")"
+
+    # Конвертация
+    # -density: разрешение чтения
+    # -units: явно задаем пиксели на дюйм
+    # -compress jpeg -quality 80: сжатие
+    # +profile "*": удаление метаданных (цветовых профилей) для уменьшения размера
+    convert -density "$DPI" -units PixelsPerInch "$INPUT_FILE" \
+            -alpha remove -alpha off \
+            -compress jpeg -quality 80 \
+            +profile "*" \
+            "$OUTPUT_FILE" >> "$LOG_FILE" 2>&1
+    
+    RET_CODE=$?
+
+    if [ $RET_CODE -eq 0 ] && [ -f "$OUTPUT_FILE" ]; then
+        OLD_SIZE=$(stat -c%s "$INPUT_FILE")
+        NEW_SIZE=$(stat -c%s "$OUTPUT_FILE")
+        
+        OLD_SIZE_H=$(du -h "$INPUT_FILE" | cut -f1)
+        NEW_SIZE_H=$(du -h "$OUTPUT_FILE" | cut -f1)
+
+        # Если новый файл больше старого (на 10%), предупреждаем и, возможно, стоило бы отменить,
+        # но пользователь может хотеть именно растеризацию. Оставляем, но пишем инфо.
+        if [ $NEW_SIZE -gt $OLD_SIZE ]; then
+             log_notify "Готово (Размер вырос!): $OLD_SIZE_H -> $NEW_SIZE_H" "gui"
+        else
+             log_notify "Готово: $OLD_SIZE_H -> $NEW_SIZE_H" "gui"
+        fi
+    else
+        log_notify "Ошибка конвертации! См. лог." "error"
+    fi
+done

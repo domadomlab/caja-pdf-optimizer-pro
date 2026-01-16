@@ -1,0 +1,21 @@
+Package: caja-pdf-optimizer
+Version: 2.0.2
+Section: utils
+Priority: optional
+Architecture: all
+Depends: caja, imagemagick, libnotify-bin, zenity, bash, caja-extensions-common | caja-actions
+Maintainer: Dom <user@localhost>
+Description: Professional PDF Optimizer Suite for Caja (v2.0.2)
+ The Ultimate PDF Compression Tool for MATE Desktop Environment.
+ .
+ Release Date: 2026-01-16
+ .
+ Changes in v2.0.2:
+  - Documentation is now fully integrated into the package structure.
+  - Installed to /usr/share/doc/caja-pdf-optimizer/README.md.
+ .
+ Core Features:
+  - 4 Quality Presets (75-300 DPI).
+  - Smart Size Detection.
+  - Silent Mode & GUI Notifications.
+  - Auto-cleanup of legacy scripts.
