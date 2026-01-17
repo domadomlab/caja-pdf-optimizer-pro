@@ -1,6 +1,7 @@
 # Build artifacts
 build/
-dist/
+# dist/ is now allowed for distribution
+# dist/
 
 # System files
 .DS_Store

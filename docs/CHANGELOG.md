@@ -1,5 +1,10 @@
 # 📜 Changelog (История изменений)
 
+## [2.0.3] - 2026-01-18
+### Added
+*   Added LICENSE file.
+*   Updated project configuration (.gitignore).
+
 ## [2.0.2] - 2026-01-16
 ### Documentation
 *   Инструкция пользователя (`README.md`) теперь включена в состав пакета (`/usr/share/doc/...`).
