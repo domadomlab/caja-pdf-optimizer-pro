@@ -2,7 +2,7 @@
 set -e
 
 # Конфигурация
-VERSION="2.0.2"
+VERSION="2.0.3"
 PKG_NAME="caja-pdf-optimizer"
 FULL_NAME="${PKG_NAME}_${VERSION}_all"
 BASE_DIR="$(cd "$(dirname "$0")/.." && pwd)"
