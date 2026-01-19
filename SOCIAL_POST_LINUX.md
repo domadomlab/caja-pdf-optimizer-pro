@@ -1,8 +1,8 @@
-# 🐧 Caja PDF Optimizer Pro v3.0.0: Твой Linux стал еще мощнее!
+# 🐧 Caja PDF Optimizer Pro v3.0.1: Твой Linux стал еще мощнее!
 
 **Пользователи Linux, ликуйте! Наша флагманская утилита для сжатия документов получила глобальное обновление.**
 
-Вы просили — мы сделали. Версия 3.0.0 для Caja (MATE) теперь умеет всё то же самое, что и наша Windows-версия, но с душой Open Source.
+Вы просили — мы сделали. Версия 3.0.1 для Caja (MATE) теперь умеет всё то же самое, что и наша Windows-версия, но с душой Open Source.
 
 ---
 
@@ -21,8 +21,8 @@
 3.  **Чистый код:** Работает на связке ImageMagick + Ghostscript + Bash.
 
 🚀 **Установка в одну команду:**
-`sudo apt install ./caja-pdf-optimizer_3.0.0_all.deb`
+`sudo apt install ./caja-pdf-optimizer_3.0.1_all.deb`
 
-📥 **Забирай на GitHub:** [https://github.com/domadomlab/caja-pdf-optimizer-pro/releases/tag/v3.0.0]
+📥 **Забирай на GitHub:** [https://github.com/domadomlab/caja-pdf-optimizer-pro/releases/tag/v3.0.1]
 
 #Linux #OpenSource #MATE #Caja #PDF #Productivity #Privacy #PrivacyMatters

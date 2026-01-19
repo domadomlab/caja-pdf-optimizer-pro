@@ -1,16 +1,15 @@
 # 📘 User Manual
-> **Caja PDF Optimizer Suite v2.0.2**
+> **Caja PDF Optimizer Suite v3.0.1**
 
 [🇷🇺 На русском](../README.md) | [🇺🇸 English](../README.en.md)
 
 ## ⚙️ Installation
 
 ### Via DEB Package (Recommended)
-1.  Go to the `dist/` directory (or download the release).
+1.  Go to the `dist/` directory.
 2.  Install the package:
     ```bash
-    sudo dpkg -i caja-pdf-optimizer_2.0.2_all.deb
-    sudo apt-get install -f
+    sudo apt install ./caja-pdf-optimizer_3.0.1_all.deb
     ```
 3.  **Restart Caja** to update the menu:
     ```bash
@@ -19,19 +18,19 @@
 
 ## 🎮 Usage
 1.  Open **Caja** file manager.
-2.  Right-click on any **PDF file**.
-3.  Select **Caja-Actions actions** -> **Optimize PDF (150 DPI)**.
+2.  Right-click on any **PDF, DOCX, or DOC file**.
+3.  Select **PDF: Email (150 DPI)**.
 4.  Wait for the notification:
-    > "Done: 5.2MB -> 1.1MB"
+    > "Done: test.docx (Squeezed by 75%)"
 
 ## 🎚️ Quality Presets
 
 | Mode | DPI | Use Case |
 | :--- | :--- | :--- |
-| **075 DPI** | 75 | **Web / Email** (Maximum compression) |
-| **150 DPI** | 150 | **Office / Standard** (Balanced) |
-| **200 DPI** | 200 | **Archive / High** (Important docs) |
-| **300 DPI** | 300 | **Print** (Print quality) |
+| **PDF: Eco** | 75 | **Web / Email** (Maximum compression) |
+| **PDF: Email** | 150 | **Office / Standard** (Balanced) |
+| **PDF: Print** | 200 | **Archive / High** (Important docs) |
+| **PDF: High** | 300 | **Print** (Original fidelity) |
 
 ## ❓ FAQ
 
