@@ -1,14 +1,14 @@
 Package: caja-pdf-optimizer
-Version: 3.1.3
+Version: 3.2.0
 Section: utils
 Priority: optional
 Architecture: all
 Depends: caja, imagemagick, ghostscript, libnotify-bin, libreoffice, bash, caja-extensions-common | caja-actions
 Maintainer: Dom <user@localhost>
-Description: Professional PDF Optimizer Suite for Caja (v3.1.3)
+Description: Professional PDF Optimizer Suite for Caja (v3.2.0)
  The Ultimate PDF Compression & Conversion Tool for MATE Desktop Environment.
  .
- Changes in v3.1.3:
+ Changes in v3.2.0:
   - Fixed "cache resources exhausted" error by increasing ImageMagick memory limits.
   - Scientific "Trellis-Quantization Mimic" applied to 150 DPI mode.
   - Added support for MS Word (.docx, .doc) and ODT files.

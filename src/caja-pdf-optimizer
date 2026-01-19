@@ -1,9 +1,9 @@
 #!/bin/bash
 # ==============================================================================
 # Caja PDF Optimizer Pro (Linux Edition)
-# Version: 3.1.3
+# Version: 3.2.0
 # ==============================================================================
-# Requirements: imagemagick, ghostscript, libreoffice, libnotify-bin
+# Requirements: imagemagick, ghostscript, libreoffice, libnotify-bin, poppler-utils
 # ==============================================================================
 
 LOG_FILE="/tmp/pdf_optimizer.log"
@@ -40,13 +40,13 @@ log_notify() {
 }
 
 # Проверка зависимостей
-for cmd in convert gs libreoffice notify-send; do
+for cmd in convert gs libreoffice notify-send pdfseparate pdfunite pdfinfo; do
     if ! command -v $cmd &> /dev/null; then
         log_notify "Ошибка: $cmd не установлен!" "error"
     fi
 done
 
-log_notify "=== СТАРТ v3.1.3 (Scientific Universal): $DPI DPI, Файлов: $# ==="
+log_notify "=== СТАРТ v3.2.0 (Heavy Duty Page-by-Page): $DPI DPI, Файлов: $# ==="
 
 for INPUT_FILE in "$@"; do
     if [ ! -f "$INPUT_FILE" ]; then continue; fi
@@ -82,33 +82,69 @@ for INPUT_FILE in "$@"; do
     RAND_CREA=${FAKE_CREATORS[$RANDOM % ${#FAKE_CREATORS[@]}]}
     RAND_TITL=${FAKE_TITLES[$RANDOM % ${#FAKE_TITLES[@]}]}
 
-    log_notify "Оптимизация: $FILENAME ($DPI DPI)"
+    # --- ОПРЕДЕЛЕНИЕ КОЛИЧЕСТВА СТРАНИЦ ---
+    PAGE_COUNT=$(pdfinfo "$WORKING_FILE" | grep -a Pages | awk '{print $2}')
+    [ -z "$PAGE_COUNT" ] && PAGE_COUNT=1
+
+    log_notify "Оптимизация: $FILENAME ($DPI DPI, $PAGE_COUNT стр.)"
 
     # --- НАУЧНАЯ МОДЕЛЬ TRELLIS MIMIC (УНИВЕРСАЛЬНАЯ) ---
-    IM_LIMITS="-limit memory 1GiB -limit map 2GiB"
-    
-    # Определение качества и базового разрешения
+    IM_LIMITS="-limit memory 2GiB -limit map 4GiB -limit area 1GiB -limit disk 16GiB"
     QUALITY=70
     READ_DPI=$DPI
-    
     if [ "$DPI" == "030" ] || [ "$DPI" == "30" ]; then
         QUALITY=40
-        READ_DPI=150 # Для экстрима читаем плотнее, но жмем сильнее
+        READ_DPI=150
     fi
 
-    convert $IM_LIMITS -density "$READ_DPI" -units PixelsPerInch "$WORKING_FILE" \
-            -alpha remove -alpha off \
-            -filter Lanczos -distort Resize 95% \
-            -unsharp 0x0.5 \
-            -sampling-factor 4:2:0 \
-            -compress jpeg -quality $QUALITY \
-            +profile "*" \
-            -define "pdf:Producer=$RAND_PROD" \
-            -define "pdf:Creator=$RAND_CREA" \
-            -define "pdf:Title=$RAND_TITL" \
-            "$OUTPUT_FILE" >> "$LOG_FILE" 2>&1
+    if [ "$PAGE_COUNT" -gt 1 ]; then
+        # --- ПОСТРАНИЧНАЯ ОБРАБОТКА (Heavy Duty) ---
+        T_DIR="/tmp/pdfopt_$(date +%s)_$BASENAME"
+        mkdir -p "$T_DIR"
+        
+        # 1. Разделение на страницы
+        pdfseparate "$WORKING_FILE" "$T_DIR/page-%04d.pdf" &>> "$LOG_FILE"
+        
+        # 2. Обработка каждой страницы индивидуально
+        for page in "$T_DIR"/page-*.pdf; do
+            opt_page="$T_DIR/opt-$(basename "$page")"
+            convert $IM_LIMITS -density "$READ_DPI" -units PixelsPerInch "$page" \
+                    -alpha remove -alpha off \
+                    -filter Lanczos -distort Resize 95% \
+                    -unsharp 0x0.5 \
+                    -sampling-factor 4:2:0 \
+                    -compress jpeg -quality $QUALITY \
+                    +profile "*" \
+                    -define "pdf:Producer=$RAND_PROD" \
+                    -define "pdf:Creator=$RAND_CREA" \
+                    -define "pdf:Title=$RAND_TITL" \
+                    "$opt_page" >> "$LOG_FILE" 2>&1
+        done
+        
+        # 3. Объединение страниц обратно
+        # pdfunite требует список файлов, сохраняем порядок
+        pdfunite "$T_DIR"/opt-page-*.pdf "$OUTPUT_FILE" &>> "$LOG_FILE"
+        RET_CODE=$?
+        
+        # Очистка
+        rm -rf "$T_DIR"
+    else
+        # --- ПРЯМАЯ ОБРАБОТКА (Для одностраничных файлов) ---
+        convert $IM_LIMITS -density "$READ_DPI" -units PixelsPerInch "$WORKING_FILE" \
+                -alpha remove -alpha off \
+                -filter Lanczos -distort Resize 95% \
+                -unsharp 0x0.5 \
+                -sampling-factor 4:2:0 \
+                -compress jpeg -quality $QUALITY \
+                +profile "*" \
+                -define "pdf:Producer=$RAND_PROD" \
+                -define "pdf:Creator=$RAND_CREA" \
+                -define "pdf:Title=$RAND_TITL" \
+                "$OUTPUT_FILE" >> "$LOG_FILE" 2>&1
+        RET_CODE=$?
+    fi
     
-    if [ $? -eq 0 ] && [ -f "$OUTPUT_FILE" ]; then
+    if [ $RET_CODE -eq 0 ] && [ -f "$OUTPUT_FILE" ]; then
         OLD_SIZE=$(stat -c%s "$INPUT_FILE")
         NEW_SIZE=$(stat -c%s "$OUTPUT_FILE")
         DIFF=$((OLD_SIZE - NEW_SIZE))
