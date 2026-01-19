@@ -2,7 +2,7 @@
 set -e
 
 # Конфигурация
-VERSION="2.0.3"
+VERSION="3.0.0"
 PKG_NAME="caja-pdf-optimizer"
 FULL_NAME="${PKG_NAME}_${VERSION}_all"
 BASE_DIR="$(cd "$(dirname "$0")/.." && pwd)"
@@ -41,13 +41,21 @@ echo "-> Generating desktop actions..."
 generate_action() {
     ORDER=$1
     DPI=$2
+    # Локализация имен
+    case $DPI in
+        075) LABEL="PDF: Eco (75 dpi)" ;;
+        150) LABEL="PDF: Email (150 dpi)" ;;
+        200) LABEL="PDF: Print (200 dpi)" ;;
+        300) LABEL="PDF: High (300 dpi)" ;;
+    esac
+
     NAME="opt_pdf_${ORDER}_${DPI}.desktop"
     
     cat > "$BUILD_DIR/$FULL_NAME/usr/share/file-manager/actions/$NAME" <<EOF
 [Desktop Entry]
 Type=Action
-Name=Optimize PDF ($DPI DPI)
-Tooltip=Compress to $DPI DPI (ImageMagick)
+Name=$LABEL
+Tooltip=Optimize PDF or Word to $DPI DPI
 Icon=application-pdf
 Profiles=profile-zero;
 TargetLocation=true
@@ -55,7 +63,7 @@ TargetContext=true
 TargetToolbar=true
 
 [X-Action-Profile profile-zero]
-MimeTypes=application/pdf;
+MimeTypes=application/pdf;application/msword;application/vnd.openxmlformats-officedocument.wordprocessingml.document;application/vnd.oasis.opendocument.text;
 Exec=/usr/bin/caja-pdf-optimizer $DPI %F
 Name=Default
 EOF

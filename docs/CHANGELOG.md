@@ -1,5 +1,13 @@
 # 📜 Changelog (История изменений)
 
+## [3.0.0] - 2026-01-19
+### Added
+*   **Word to PDF Conversion:** Added silent conversion for `.docx`, `.doc`, and `.odt` files using LibreOffice headless mode.
+*   **Camouflage Mode:** Implemented fake scanner metadata injection (HP, Canon, Xerox, etc.) to match the Windows version features.
+*   **Enhanced Compression:** Optimized ImageMagick parameters with JPEG 4:2:0 subsampling and quality 70.
+*   **New Notifications:** System tray notifications now include compression statistics (percentage and final size).
+*   **Unified UI:** Context menu labels now follow the "PDF: [Mode] ([DPI] dpi)" format.
+
 ## [2.0.3] - 2026-01-18
 ### Added
 *   Added LICENSE file.

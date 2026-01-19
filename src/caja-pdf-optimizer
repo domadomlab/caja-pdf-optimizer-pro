@@ -1,91 +1,126 @@
 #!/bin/bash
 # ==============================================================================
-# Universal PDF Optimizer (ImageMagick)
+# Caja PDF Optimizer Pro (Linux Edition)
+# Version: 3.0.0
 # ==============================================================================
-# Использование: ./pdf_optimizer.sh [DPI] [FILES...]
-# Если первый аргумент число - это DPI. Иначе DPI=200.
+# Requirements: imagemagick, ghostscript, libreoffice, libnotify-bin
 # ==============================================================================
 
 LOG_FILE="/tmp/pdf_optimizer.log"
-DEFAULT_DPI=200
-SUFFIX="_opt"
+DEFAULT_DPI=150
+
+# --- База данных "сканеров" для маскировки (Camouflage) ---
+FAKE_PRODUCERS=("HP LaserJet MFP M426fdw" "HP Color LaserJet Pro MFP M283fdw" "Canon iR-ADV C5535" "Canon MF Scan Utility" "Xerox WorkCentre 7845" "Kyocera ECOSYS M2540dn" "Brother MFC-L2710DW" "Epson Scan 2")
+FAKE_CREATORS=("HP Scan" "HP Smart" "Canon PDF Platform" "Xerox WorkCentre" "KM-4050 Scanner" "Brother iPrint&Scan" "EPSON Scan")
+FAKE_TITLES=("Scanned Document" "Scan" "Doc" "Document" "Scan_$(date +%Y)" "CCF_0001")
 
 # Экспорт дисплея для GUI уведомлений
 export DISPLAY="${DISPLAY:-:0}"
 
 # --- Парсинг аргументов ---
-# Проверяем, является ли первый аргумент числом (DPI)
 if [[ "$1" =~ ^[0-9]+$ ]]; then
     DPI="$1"
-    shift # Сдвигаем аргументы, чтобы остались только файлы
+    shift
 else
     DPI=$DEFAULT_DPI
 fi
 
 SUFFIX="_${DPI}dpi"
 
-# Функция лог+уведомление
 log_notify() {
     local MSG="$1"
-    local TYPE="$2" # gui, error, info
+    local TYPE="$2"
     echo "[$(date '+%H:%M:%S')] $MSG" >> "$LOG_FILE"
     
-    if [ "$TYPE" == "gui" ]; then
-        notify-send -i "application-pdf" "PDF Optimizer ($DPI DPI)" "$MSG" 2>/dev/null || \
-        zenity --notification --text="$MSG" 2>/dev/null
-elif [ "$TYPE" == "error" ]; then
-     notify-send -u critical -i "dialog-error" "PDF Optimizer Error" "$MSG" 2>/dev/null
-fi
+    if [[ "$TYPE" == "gui" ]]; then
+        notify-send -i "application-pdf" "PDF Optimizer" "$MSG" 2>/dev/null
+    elif [[ "$TYPE" == "error" ]]; then
+        notify-send -u critical -i "dialog-error" "PDF Optimizer Error" "$MSG" 2>/dev/null
+    fi
 }
 
 # Проверка зависимостей
-if ! command -v convert &> /dev/null; then
-    log_notify "ImageMagick не установлен (команда convert)!" "error"
-    exit 1
-fi
-
-log_notify "=== Старт: $DPI DPI, Файлов: $# ==="
-
-# Обработка файлов
-for INPUT_FILE in "$@"; do
-    if [ ! -f "$INPUT_FILE" ]; then
-        continue
+for cmd in convert gs libreoffice notify-send; do
+    if ! command -v $cmd &> /dev/null; then
+        log_notify "Ошибка: $cmd не установлен!" "error"
+        # exit 1 # Не выходим, пробуем работать без части функций
     fi
+done
+
+log_notify "=== СТАРТ v3.0.0: $DPI DPI, Файлов: $# ==="
+
+for INPUT_FILE in "$@"; do
+    if [ ! -f "$INPUT_FILE" ]; then continue; fi
 
     DIRNAME=$(dirname "$INPUT_FILE")
-    BASENAME=$(basename "$INPUT_FILE" .pdf)
+    FILENAME=$(basename "$INPUT_FILE")
+    EXTENSION="${FILENAME##*.}"
+    BASENAME="${FILENAME%.*}"
+    
+    WORKING_FILE="$INPUT_FILE"
+    IS_TEMP_PDF=false
+
+    # --- Поддержка Word/Docx/ODT ---
+    if [[ "$EXTENSION" =~ ^(doc|docx|odt)$ ]]; then
+        log_notify "Конвертация документа Word: $FILENAME" "info"
+        TEMP_PDF="/tmp/temp_$(date +%s)_$BASENAME.pdf"
+        libreoffice --headless --convert-to pdf --outdir "/tmp" "$INPUT_FILE" &>> "$LOG_FILE"
+        
+        # LibreOffice сохраняет в файл с тем же именем, но .pdf в указанный outdir
+        LO_OUT="/tmp/$BASENAME.pdf"
+        if [ -f "$LO_OUT" ]; then
+            mv "$LO_OUT" "$TEMP_PDF"
+            WORKING_FILE="$TEMP_PDF"
+            IS_TEMP_PDF=true
+        else
+            log_notify "Ошибка конвертации Word: $FILENAME" "error"
+            continue
+        fi
+    fi
+
     OUTPUT_FILE="${DIRNAME}/${BASENAME}${SUFFIX}.pdf"
+    
+    # Генерация случайных метаданных
+    RAND_PROD=${FAKE_PRODUCERS[$RANDOM % ${#FAKE_PRODUCERS[@]}]})
+    RAND_CREA=${FAKE_CREATORS[$RANDOM % ${#FAKE_CREATORS[@]}]})
+    RAND_TITL=${FAKE_TITLES[$RANDOM % ${#FAKE_TITLES[@]}]})
 
-    log_notify "Обработка: $(basename "$INPUT_FILE")"
+    log_notify "Оптимизация: $FILENAME ($DPI DPI)"
 
-    # Конвертация
-    # -density: разрешение чтения
-    # -units: явно задаем пиксели на дюйм
-    # -compress jpeg -quality 80: сжатие
-    # +profile "*": удаление метаданных (цветовых профилей) для уменьшения размера
-    convert -density "$DPI" -units PixelsPerInch "$INPUT_FILE" \
+    # Основная команда ImageMagick
+    # -sampling-factor 4:2:0 - ключевой параметр для сжатия как в Win версии
+    convert -density "$DPI" -units PixelsPerInch "$WORKING_FILE" \
             -alpha remove -alpha off \
-            -compress jpeg -quality 80 \
+            -sampling-factor 4:2:0 \
+            -compress jpeg -quality 70 \
             +profile "*" \
+            -define "pdf:Producer=$RAND_PROD" \
+            -define "pdf:Creator=$RAND_CREA" \
+            -define "pdf:Title=$RAND_TITL" \
             "$OUTPUT_FILE" >> "$LOG_FILE" 2>&1
     
-    RET_CODE=$?
-
-    if [ $RET_CODE -eq 0 ] && [ -f "$OUTPUT_FILE" ]; then
+    if [ $? -eq 0 ] && [ -f "$OUTPUT_FILE" ]; then
         OLD_SIZE=$(stat -c%s "$INPUT_FILE")
         NEW_SIZE=$(stat -c%s "$OUTPUT_FILE")
         
+        # Расчет процента сжатия
+        DIFF=$((OLD_SIZE - NEW_SIZE))
+        if [ $OLD_SIZE -gt 0 ]; then
+            PCT=$(( 100 * DIFF / OLD_SIZE ))
+        else
+            PCT=0
+        fi
+
         OLD_SIZE_H=$(du -h "$INPUT_FILE" | cut -f1)
         NEW_SIZE_H=$(du -h "$OUTPUT_FILE" | cut -f1)
 
-        # Если новый файл больше старого (на 10%), предупреждаем и, возможно, стоило бы отменить,
-        # но пользователь может хотеть именно растеризацию. Оставляем, но пишем инфо.
-        if [ $NEW_SIZE -gt $OLD_SIZE ]; then
-             log_notify "Готово (Размер вырос!): $OLD_SIZE_H -> $NEW_SIZE_H" "gui"
-        else
-             log_notify "Готово: $OLD_SIZE_H -> $NEW_SIZE_H" "gui"
-        fi
+        log_notify "Готово: $FILENAME\nСжато на $PCT% ($NEW_SIZE_H)" "gui"
     else
-        log_notify "Ошибка конвертации! См. лог." "error"
+        log_notify "Ошибка обработки: $FILENAME" "error"
+    fi
+
+    # Очистка временного PDF
+    if [ "$IS_TEMP_PDF" = true ] && [ -f "$WORKING_FILE" ]; then
+        rm "$WORKING_FILE"
     fi
 done

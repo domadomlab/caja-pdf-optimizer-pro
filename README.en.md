@@ -1,35 +1,49 @@
-# Caja PDF Optimizer Suite
+# Caja PDF Optimizer Pro 🚀 (Linux Edition)
 
-![Version](https://img.shields.io/badge/version-2.0.2-blue.svg)
-![License](https://img.shields.io/badge/license-MIT-green.svg)
-![Platform](https://img.shields.io/badge/platform-Linux%20MATE-orange.svg)
-
-[🇷🇺 Русская версия](README.md) | [🇺🇸 English Version](README.en.md)
-
-**Professional PDF optimization tool integrated into the Caja file manager.**
-
-This project provides a set of context menu actions to instantly compress and rasterize PDF documents using the power of ImageMagick.
-
-## 🚀 Features
-*   **4 Quality Levels:** 75, 150, 200, 300 DPI.
-*   **Smart Compression:** Prevents the file size from increasing (Smart Size Detection).
-*   **Safety:** Works with a copy of the file, keeping the original safe.
-*   **Notifications:** Full desktop integration via `notify-send`.
-
-## 📂 Project Structure
-See [STRUCTURE.md](STRUCTURE.md) for details (Russian).
-
-## 📖 Documentation
-*   [User Manual](docs/USER_MANUAL.en.md)
-*   [Changelog](docs/CHANGELOG.md)
-*   [Roadmap](docs/ROADMAP.md)
-
-## 🛠 Build from Source
-To build the `.deb` package, run:
-```bash
-./bin/build.sh
-```
-Artifacts will be generated in the `dist/` directory.
+**Professional tool for PDF compression and document conversion directly from the Caja context menu.**
 
 ---
-© 2026 Dom Corp.
+
+## ✨ New in Version 3.0.0
+
+*   **📘 Word Support:** Convert `.docx`, `.doc`, and `.odt` to optimized PDF with one click (powered by LibreOffice).
+*   **🕵️ Camouflage Mode:** Strips real metadata and injects random scanner signatures (HP, Canon, Xerox, etc.). Your digital files look like hardware scans.
+*   **📉 Enhanced Compression:** JPEG 4:2:0 subsampling and optimized Quality 70 settings.
+*   **📊 Statistics:** Notifications now show compression percentage and final file size.
+
+---
+
+## 🚀 Features
+
+1.  **4 Quality Presets:**
+    *   **75 DPI (Eco):** Maximum compression (up to 90%).
+    *   **150 DPI (Email):** Best balance for sharing.
+    *   **200 DPI (Print):** For high-quality document printing.
+    *   **300 DPI (High):** Maximum fidelity.
+2.  **Total Privacy:** Automatic removal of all hidden metadata (Author, Software, GPS).
+3.  **Seamless Integration:** Feels like a native feature of the Caja file manager.
+
+---
+
+## 🛠 Installation
+
+1.  Download the latest `.deb` package from [Releases](https://github.com/domadomlab/caja-pdf-optimizer-pro/releases).
+2.  Install it:
+    ```bash
+    sudo apt install ./caja-pdf-optimizer_3.0.0_all.deb
+    ```
+3.  Restart Caja:
+    ```bash
+    caja -q
+    ```
+
+---
+
+## 📦 Dependencies
+
+The installer will automatically handle:
+`imagemagick`, `ghostscript`, `libreoffice`, `libnotify-bin`.
+
+---
+
+*(c) 2026 DomCorp. Licensed under MIT.*
