@@ -1,6 +1,6 @@
 # 📜 Changelog (История изменений)
 
-## [3.1.0] - 2026-01-19
+## [3.1.1] - 2026-01-19
 ### Added
 *   **Extreme Mode (Min Size):** New scientific compression preset using Trellis-Quantization Mimic.
 *   **Optimized Pipeline:** Updated ImageMagick core logic for better SSIM results.
