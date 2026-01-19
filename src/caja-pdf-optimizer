@@ -1,16 +1,26 @@
 #!/bin/bash
 # ==============================================================================
 # Caja PDF Optimizer Pro (Linux Edition)
-# Version: 3.5.2 (Metadata Camouflage Final)
+# Version: 3.5.3 (Linked Metadata Logic)
 # ==============================================================================
 
 LOG_FILE="/tmp/pdf_optimizer.log"
 DEFAULT_DPI=150
 SRC_DIR="$(cd "$(dirname "$0")" && pwd)"
 
-FAKE_PRODUCERS=("HP LaserJet MFP M426fdw" "HP Color LaserJet Pro MFP M283fdw" "Canon iR-ADV C5535" "Canon MF Scan Utility" "Xerox WorkCentre 7845" "Kyocera ECOSYS M2540dn" "Brother MFC-L2710DW" "Epson Scan 2")
-FAKE_CREATORS=("HP Scan" "HP Smart" "Canon PDF Platform" "Xerox WorkCentre" "KM-4050 Scanner" "Brother iPrint&Scan" "EPSON Scan")
-FAKE_TITLES=("Scanned Document" "Scan" "Doc" "Document" "Scan_$(date +%Y)" "CCF_0001")
+# --- Matched Scanner Profiles (Brand Consistency) ---
+# Format: "Brand|Producer|Creator"
+PROFILES=(
+    "HP|HP LaserJet MFP M426fdw|HP Scan"
+    "HP|HP Color LaserJet Pro MFP M283fdw|HP Smart"
+    "Canon|Canon iR-ADV C5535|Canon PDF Platform"
+    "Canon|Canon MF Scan Utility|Canon MF643Cdw"
+    "Xerox|Xerox WorkCentre 7845|Xerox WorkCentre"
+    "Xerox|Xerox VersaLink C405|Xerox MFP"
+    "Kyocera|Kyocera ECOSYS M2540dn|KM-4050 Scanner"
+    "Brother|Brother MFC-L2710DW|Brother iPrint&Scan"
+    "Epson|Epson Scan 2|EPSON Scan"
+)
 
 export DISPLAY="${DISPLAY:-:0}"
 
@@ -29,7 +39,7 @@ log_notify() {
     elif [[ "$TYPE" == "error" ]]; then notify-send -u critical -i "dialog-error" "PDF Optimizer Error" "$MSG" 2>/dev/null; fi
 }
 
-log_notify "=== СТАРТ v3.5.2: $DPI DPI, Файлов: $# ==="
+log_notify "=== СТАРТ v3.5.3: $DPI DPI, Файлов: $# ==="
 
 for INPUT_FILE in "$@"; do
     if [ ! -f "$INPUT_FILE" ]; then continue; fi
@@ -56,14 +66,18 @@ for INPUT_FILE in "$@"; do
     QUALITY=70; READ_DPI=$DPI
     if [ "$DPI" == "030" ] || [ "$DPI" == "30" ]; then QUALITY=40; READ_DPI=150; fi
     
-    RAND_PROD=${FAKE_PRODUCERS[$RANDOM % ${#FAKE_PRODUCERS[@]}]}
-    RAND_CREA=${FAKE_CREATORS[$RANDOM % ${#FAKE_CREATORS[@]}]}
-    RAND_TITL=${FAKE_TITLES[$RANDOM % ${#FAKE_TITLES[@]}]}
+    # Selection of matched profile
+    RAND_IDX=$((RANDOM % ${#PROFILES[@]}))
+    SELECTED_PROFILE=${PROFILES[$RAND_IDX]}
+    BRAND=$(echo $SELECTED_PROFILE | cut -d'|' -f1)
+    RAND_PROD=$(echo $SELECTED_PROFILE | cut -d'|' -f2)
+    RAND_CREA=$(echo $SELECTED_PROFILE | cut -d'|' -f3)
+    TITLES=("Scanned Document" "Scan" "Doc" "Document" "Scan_$(date +%Y)")
+    RAND_TITL=${TITLES[$RANDOM % ${#TITLES[@]}]}
 
     T_DIR="/tmp/pdfopt_$(date +%s)_$BASENAME"
     mkdir -p "$T_DIR"
 
-    # pdfmarks for standard metadata
     META_FILE="$T_DIR/pdfmarks"
     cat > "$META_FILE" <<EOF
 [ /Title ($RAND_TITL)
