@@ -5,7 +5,7 @@ Priority: optional
 Architecture: all
 Depends: caja, imagemagick, ghostscript, libnotify-bin, libreoffice, bash, caja-extensions-common | caja-actions
 Maintainer: Dom <user@localhost>
-Description: Professional PDF Optimizer Suite for Caja (v3.6.0)
+Description: Professional PDF Optimizer Suite for Caja (v3.6.0 LTS)
  The Ultimate PDF Compression & Conversion Tool for MATE Desktop Environment.
  .
  Changes in v3.6.0:

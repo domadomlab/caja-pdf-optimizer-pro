@@ -1,4 +1,4 @@
-# Caja PDF Optimizer Pro 🚀 (Linux Edition) v3.6.0
+# Caja PDF Optimizer Pro 🚀 (Linux Edition) v3.6.0 LTS
 
 [🇷🇺 Русский](README.md) | [🇺🇸 English](README.en.md)
 
