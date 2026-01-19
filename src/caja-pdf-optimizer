@@ -1,14 +1,16 @@
 #!/bin/bash
 # ==============================================================================
 # Caja PDF Optimizer Pro (Linux Edition)
-# Version: 3.3.1 (Scientific Parallel)
+# Version: 3.5.2 (Metadata Camouflage Final)
 # ==============================================================================
 
 LOG_FILE="/tmp/pdf_optimizer.log"
 DEFAULT_DPI=150
+SRC_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 FAKE_PRODUCERS=("HP LaserJet MFP M426fdw" "HP Color LaserJet Pro MFP M283fdw" "Canon iR-ADV C5535" "Canon MF Scan Utility" "Xerox WorkCentre 7845" "Kyocera ECOSYS M2540dn" "Brother MFC-L2710DW" "Epson Scan 2")
 FAKE_CREATORS=("HP Scan" "HP Smart" "Canon PDF Platform" "Xerox WorkCentre" "KM-4050 Scanner" "Brother iPrint&Scan" "EPSON Scan")
+FAKE_TITLES=("Scanned Document" "Scan" "Doc" "Document" "Scan_$(date +%Y)" "CCF_0001")
 
 export DISPLAY="${DISPLAY:-:0}"
 
@@ -27,7 +29,7 @@ log_notify() {
     elif [[ "$TYPE" == "error" ]]; then notify-send -u critical -i "dialog-error" "PDF Optimizer Error" "$MSG" 2>/dev/null; fi
 }
 
-log_notify "=== СТАРТ v3.3.1 (Parallel Pro): $DPI DPI, Файлов: $# ==="
+log_notify "=== СТАРТ v3.5.2: $DPI DPI, Файлов: $# ==="
 
 for INPUT_FILE in "$@"; do
     if [ ! -f "$INPUT_FILE" ]; then continue; fi
@@ -50,20 +52,28 @@ for INPUT_FILE in "$@"; do
 
     log_notify "Оптимизация ($PAGE_COUNT стр.): $FILENAME"
 
-    # Per-thread limits: 512MB RAM, 1GB Map
-    IM_LIMITS="-limit memory 512MiB -limit map 1GiB -limit area 256MiB -limit disk 16GiB"
+    IM_LIMITS="-limit memory 1GiB -limit map 2GiB -limit area 512MiB -limit disk 16GiB"
     QUALITY=70; READ_DPI=$DPI
     if [ "$DPI" == "030" ] || [ "$DPI" == "30" ]; then QUALITY=40; READ_DPI=150; fi
     
-    # Select ONE random scanner for the WHOLE document
     RAND_PROD=${FAKE_PRODUCERS[$RANDOM % ${#FAKE_PRODUCERS[@]}]}
     RAND_CREA=${FAKE_CREATORS[$RANDOM % ${#FAKE_CREATORS[@]}]}
+    RAND_TITL=${FAKE_TITLES[$RANDOM % ${#FAKE_TITLES[@]}]}
+
+    T_DIR="/tmp/pdfopt_$(date +%s)_$BASENAME"
+    mkdir -p "$T_DIR"
+
+    # pdfmarks for standard metadata
+    META_FILE="$T_DIR/pdfmarks"
+    cat > "$META_FILE" <<EOF
+[ /Title ($RAND_TITL)
+  /Author (Scanner)
+  /Creator ($RAND_CREA)
+  /DOCINFO pdfmark
+EOF
 
     if [ "$PAGE_COUNT" -gt 1 ]; then
-        T_DIR="/tmp/pdfturbo_$(date +%s)_$BASENAME"
-        mkdir -p "$T_DIR"
         pdfseparate "$WORKING_FILE" "$T_DIR/p-%04d.pdf"
-        
         CORES=$(nproc)
         count=0
         for page in "$T_DIR"/p-*.pdf; do
@@ -71,30 +81,28 @@ for INPUT_FILE in "$@"; do
             convert $IM_LIMITS -density "$READ_DPI" -units PixelsPerInch "$page" \
                     -alpha remove -alpha off -filter Lanczos -distort Resize 95% \
                     -unsharp 0x0.5 -sampling-factor 4:2:0 -compress jpeg -quality $QUALITY \
-                    +profile "*" -define "pdf:Producer=$RAND_PROD" -define "pdf:Creator=$RAND_CREA" "$opt_page" >> "$LOG_FILE" 2>&1 &
-            
+                    +profile "*" "$opt_page" >> "$LOG_FILE" 2>&1 &
             count=$((count + 1))
             if [ $((count % CORES)) -eq 0 ]; then wait; fi
         done
         wait
-        
-        pdfunite "$T_DIR"/opt-p-*.pdf "$OUTPUT_FILE" &>> "$LOG_FILE"
-        RET_CODE=$?
-        rm -rf "$T_DIR"
+        gs -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -sOUTPUTFILE="$OUTPUT_FILE" "$T_DIR"/opt-p-*.pdf "$META_FILE" &>> "$LOG_FILE"
     else
+        OPT_SINGLE="$T_DIR/opt_single.pdf"
         convert $IM_LIMITS -density "$READ_DPI" -units PixelsPerInch "$WORKING_FILE" \
                 -alpha remove -alpha off -filter Lanczos -distort Resize 95% \
                 -unsharp 0x0.5 -sampling-factor 4:2:0 -compress jpeg -quality $QUALITY \
-                +profile "*" -define "pdf:Producer=$RAND_PROD" -define "pdf:Creator=$RAND_CREA" "$OUTPUT_FILE" >> "$LOG_FILE" 2>&1
-        RET_CODE=$?
+                +profile "*" "$OPT_SINGLE" >> "$LOG_FILE" 2>&1
+        gs -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -sOUTPUTFILE="$OUTPUT_FILE" "$OPT_SINGLE" "$META_FILE" &>> "$LOG_FILE"
     fi
     
-    if [ $RET_CODE -eq 0 ] && [ -f "$OUTPUT_FILE" ]; then
-        OLD_SIZE=$(stat -c%s "$INPUT_FILE"); NEW_SIZE=$(stat -c%s "$OUTPUT_FILE")
-        DIFF=$((OLD_SIZE - NEW_SIZE))
-        [ $OLD_SIZE -gt 0 ] && PCT=$(( 100 * DIFF / OLD_SIZE )) || PCT=0
-        log_notify "Готово: $FILENAME\nСжато на $PCT% ($(du -h "$OUTPUT_FILE" | cut -f1))" "gui"
+    # Patch Producer via Python (Standard lib)
+    python3 "$SRC_DIR/pdf_meta.py" "$OUTPUT_FILE" "$RAND_PROD"
+
+    if [ $? -eq 0 ] && [ -f "$OUTPUT_FILE" ]; then
+        log_notify "Готово: $FILENAME ($(du -h "$OUTPUT_FILE" | cut -f1))" "gui"
     else log_notify "Ошибка обработки: $FILENAME" "error"; fi
 
+    rm -rf "$T_DIR"
     [ "$IS_TEMP_PDF" = true ] && [ -f "$WORKING_FILE" ] && rm "$WORKING_FILE"
 done

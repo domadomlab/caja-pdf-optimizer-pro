@@ -2,7 +2,7 @@
 set -e
 
 # Конфигурация
-VERSION="3.3.1"
+VERSION="3.5.2"
 PKG_NAME="caja-pdf-optimizer"
 FULL_NAME="${PKG_NAME}_${VERSION}_all"
 BASE_DIR="$(cd "$(dirname "$0")/.." && pwd)"
@@ -22,7 +22,9 @@ mkdir -p "$BUILD_DIR/$FULL_NAME/usr/share/doc/$PKG_NAME"
 # 2. Копирование скриптов
 echo "-> Copying binaries..."
 cp "$SRC_DIR/caja-pdf-optimizer" "$BUILD_DIR/$FULL_NAME/usr/bin/"
+cp "$SRC_DIR/pdf_meta.py" "$BUILD_DIR/$FULL_NAME/usr/bin/"
 chmod 755 "$BUILD_DIR/$FULL_NAME/usr/bin/caja-pdf-optimizer"
+chmod 755 "$BUILD_DIR/$FULL_NAME/usr/bin/pdf_meta.py"
 
 # 3. Копирование метаданных
 echo "-> Copying control files..."

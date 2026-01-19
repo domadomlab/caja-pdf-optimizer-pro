@@ -1,6 +1,11 @@
+## [3.5.2] - 2026-01-19
+### Changed
+- **Project Optimization**: Removed all binary artifacts from the repository. Cleaned up build scripts and unified the documentation format.
+- **Stability**: Confirmed parallel processing reliability on multi-page documents.
+
 # 📜 Changelog (История изменений)
 
-## [3.3.1] - 2026-01-19
+## [3.5.2] - 2026-01-19
 ### Added
 - **Universal Trellis Mimic**: The scientific compression engine (Lanczos + Resize 95% + Unsharp) is now applied to **ALL** quality presets (75, 150, 200, 300 DPI) for maximum efficiency and clarity.
 - **Resource Management**: Standardized memory limits across all modes to ensure stability with large documents.

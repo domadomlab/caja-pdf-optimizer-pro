@@ -1,4 +1,4 @@
-# Caja PDF Optimizer Pro 🚀 (Linux Edition) v3.3.1
+# Caja PDF Optimizer Pro 🚀 (Linux Edition) v3.5.2
 
 **Professional tool for PDF compression and document conversion directly from the Caja context menu.**
 

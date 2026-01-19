@@ -1,4 +1,4 @@
-# Caja PDF Optimizer Pro 🚀 (Linux Edition) v3.3.1
+# Caja PDF Optimizer Pro 🚀 (Linux Edition) v3.5.2
 
 [🇷🇺 Русский](README.md) | [🇺🇸 English](README.en.md)
 
@@ -11,7 +11,7 @@
 
 ## ✨ Features / Возможности
 
-### 🔬 Universal Scientific Engine (New in v3.3.1)
+### 🔬 Universal Scientific Engine (New in v3.5.2)
 **Trellis-Quantization Mimic** is now applied to ALL modes. Uses **Lanczos filtering** and **adaptive 95% resizing** to remove digital noise and sharpen text.
 *Научное сжатие во всех режимах (75-300 DPI). Удаление шума матрицы и интеллектуальная упаковка JPEG.*
 
@@ -42,7 +42,7 @@ Strips real metadata and injects random scanner signatures.
 1.  Download the latest `.deb` package from [Releases](https://github.com/domadomlab/caja-pdf-optimizer-pro/releases).
 2.  Install it:
     ```bash
-    sudo apt install ./caja-pdf-optimizer_3.3.1_all.deb
+    sudo apt install ./caja-pdf-optimizer_3.5.2_all.deb
     ```
 3.  Restart Caja:
     ```bash
