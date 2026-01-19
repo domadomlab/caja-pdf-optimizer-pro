@@ -1,38 +1,39 @@
-# Caja PDF Optimizer Pro 🚀 (Linux Edition) v3.1.2
+# Caja PDF Optimizer Pro 🚀 (Linux Edition) v3.1.3
 
 [🇷🇺 Русский](README.md) | [🇺🇸 English](README.en.md)
 
 ---
 
 **Professional tool for PDF compression and document conversion directly from the Caja context menu.**
-**Профессиональный инструмент для сжатия PDF и конвертации документов прямо из контекстного меню Caja.**
+**Единственная утилита для Linux, использующая научный подход к сжатию документов через контекстное меню.**
 
 ---
 
 ## ✨ Features / Возможности
 
+### 🔬 Universal Scientific Engine (New in v3.1.3)
+**Trellis-Quantization Mimic** is now applied to ALL modes. Uses **Lanczos filtering** and **adaptive 95% resizing** to remove digital noise and sharpen text.
+*Научное сжатие во всех режимах (75-300 DPI). Удаление шума матрицы и интеллектуальная упаковка JPEG.*
+
 ### 📘 Word & Office Support
 Convert `.docx`, `.doc`, and `.odt` to optimized PDF with one click (powered by LibreOffice).
-*Конвертация документов Office в PDF "на лету" без открытия редактора.*
+*Фоновая конвертация документов Office в PDF.*
 
-### 🕵️ Camouflage Mode (Privacy 2.0)
-Strips real metadata and injects random scanner signatures (HP, Canon, Xerox, etc.). Your digital files look like hardware scans.
-*Очистка метаданных и подмена "отпечатков" под реальные офисные сканеры.*
-
-### 📉 Enhanced Compression
-JPEG 4:2:0 subsampling and optimized Quality 70 settings for maximum size reduction (up to 90%) with sharp text.
-*Продвинутое сжатие (4:2:0) для минимального веса при сохранении читаемости.*
+### 🕵️ Camouflage Mode
+Strips real metadata and injects random scanner signatures.
+*Маскировка под реальные офисные сканеры.*
 
 ---
 
-## 🚀 Quality Presets / Режимы Сжатия
+## 📉 Compression Modes / Режимы Сжатия
 
-| Mode | DPI | Use Case | Size Reduction |
+| Mode | DPI | Size Reduction | Use Case |
 | :--- | :--- | :--- | :--- |
-| **PDF: Eco** | 75 | Messengers, quick drafts | ~85-95% |
-| **PDF: Email** | 150 | Official sharing (Standard) | ~60-80% |
-| **PDF: Print** | 200 | Office printing | ~40-60% |
-| **PDF: High** | 300 | High-quality archiving | ~10-25% |
+| **PDF: Extreme** | 30 | **-85-90%** | Satellite / Min Size |
+| **PDF: Eco** | 75 | **-75-85%** | Web / Messengers |
+| **PDF: Email** | 150 | **-60-75%** | Official / Standard |
+| **PDF: Print** | 200 | **-40-60%** | Office printing |
+| **PDF: High** | 300 | **-20-35%** | Original fidelity |
 
 ---
 
@@ -41,7 +42,7 @@ JPEG 4:2:0 subsampling and optimized Quality 70 settings for maximum size reduct
 1.  Download the latest `.deb` package from [Releases](https://github.com/domadomlab/caja-pdf-optimizer-pro/releases).
 2.  Install it:
     ```bash
-    sudo apt install ./caja-pdf-optimizer_3.1.2_all.deb
+    sudo apt install ./caja-pdf-optimizer_3.1.3_all.deb
     ```
 3.  Restart Caja:
     ```bash
@@ -50,8 +51,4 @@ JPEG 4:2:0 subsampling and optimized Quality 70 settings for maximum size reduct
 
 ---
 
-## 📦 Dependencies / Зависимости
-`imagemagick`, `ghostscript`, `libreoffice`, `libnotify-bin`.
-
----
 *(c) 2026 DomCorp. Licensed under MIT.*
