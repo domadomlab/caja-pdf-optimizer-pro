@@ -6,10 +6,15 @@ if which update-desktop-database >/dev/null 2>&1; then
     update-desktop-database -q /usr/share/applications
 fi
 
-echo "Configuring Caja PDF Optimizer v2.0.2..."
+echo "Configuring Caja PDF Optimizer v3.0.0..."
 
-# 2. ОЧИСТКА ДУБЛИКАТОВ
-echo "Scanning for legacy versions..."
+# 2. СИСТЕМНАЯ ОЧИСТКА (Legacy Cleanup)
+# Удаляем старые версии из системных директорий, которые могли остаться от v1.x
+rm -f /usr/share/file-manager/actions/gimp*.desktop
+rm -f /usr/share/file-manager/actions/optimize_pdf_*.desktop
+
+# 3. ПОЛЬЗОВАТЕЛЬСКАЯ ОЧИСТКА (User Cleanup)
+# Проходим по всем пользователям и чистим их локальные папки действий
 for user_dir in /home/*; do
     if [ -d "$user_dir" ]; then
         USER_ACTIONS_DIR="$user_dir/.local/share/file-manager/actions"
@@ -27,10 +32,13 @@ for user_dir in /home/*; do
     fi
 done
 
+# Оповещаем проводник об изменениях
+if which caja >/dev/null 2>&1; then
+    # Мы не можем перезапустить caja отсюда (sudo), но можем намекнуть
+    echo "Notice: To apply changes, please restart Caja using 'caja -q'"
+fi
+
 echo "---------------------------------------------------------"
-echo "Caja PDF Optimizer v2.0.2 installed successfully!"
+echo "Caja PDF Optimizer v3.0.0 installed successfully!"
 echo "Documentation available at: /usr/share/doc/caja-pdf-optimizer/README.md"
-echo ""
-echo "Please restart Caja:"
-echo "  caja -q"
 echo "---------------------------------------------------------"

@@ -81,9 +81,9 @@ for INPUT_FILE in "$@"; do
     OUTPUT_FILE="${DIRNAME}/${BASENAME}${SUFFIX}.pdf"
     
     # Генерация случайных метаданных
-    RAND_PROD=${FAKE_PRODUCERS[$RANDOM % ${#FAKE_PRODUCERS[@]}]})
-    RAND_CREA=${FAKE_CREATORS[$RANDOM % ${#FAKE_CREATORS[@]}]})
-    RAND_TITL=${FAKE_TITLES[$RANDOM % ${#FAKE_TITLES[@]}]})
+    RAND_PROD=${FAKE_PRODUCERS[$RANDOM % ${#FAKE_PRODUCERS[@]}]}
+    RAND_CREA=${FAKE_CREATORS[$RANDOM % ${#FAKE_CREATORS[@]}]}
+    RAND_TITL=${FAKE_TITLES[$RANDOM % ${#FAKE_TITLES[@]}]}
 
     log_notify "Оптимизация: $FILENAME ($DPI DPI)"
 

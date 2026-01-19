@@ -1,5 +1,11 @@
 # 📜 Changelog (История изменений)
 
+## [3.0.1] - 2026-01-19
+### Fixed
+*   **Syntax Error:** Removed extra parentheses in metadata generation logic that prevented the script from running.
+*   **Deep Cleanup:** Improved `postinst` script to aggressively remove legacy `gimp*` and `optimize_pdf*` menu entries from all system and user directories.
+*   **Stability:** Added better error handling for LibreOffice conversion.
+
 ## [3.0.0] - 2026-01-19
 ### Added
 *   **Word to PDF Conversion:** Added silent conversion for `.docx`, `.doc`, and `.odt` files using LibreOffice headless mode.
