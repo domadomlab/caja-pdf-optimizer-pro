@@ -1,25 +1,25 @@
 #!/bin/bash
 # ==============================================================================
 # Caja PDF Optimizer Pro (Linux Edition)
-# Version: 3.5.3 (Linked Metadata Logic)
+# Version: 3.6.0 (Global Profiles Update)
 # ==============================================================================
 
 LOG_FILE="/tmp/pdf_optimizer.log"
 DEFAULT_DPI=150
 SRC_DIR="$(cd "$(dirname "$0")" && pwd)"
 
-# --- Matched Scanner Profiles (Brand Consistency) ---
+# --- Matched Global Scanner Profiles 2024-2025 ---
 # Format: "Brand|Producer|Creator"
 PROFILES=(
-    "HP|HP LaserJet MFP M426fdw|HP Scan"
-    "HP|HP Color LaserJet Pro MFP M283fdw|HP Smart"
-    "Canon|Canon iR-ADV C5535|Canon PDF Platform"
-    "Canon|Canon MF Scan Utility|Canon MF643Cdw"
-    "Xerox|Xerox WorkCentre 7845|Xerox WorkCentre"
-    "Xerox|Xerox VersaLink C405|Xerox MFP"
-    "Kyocera|Kyocera ECOSYS M2540dn|KM-4050 Scanner"
-    "Brother|Brother MFC-L2710DW|Brother iPrint&Scan"
-    "Epson|Epson Scan 2|EPSON Scan"
+    "Fujitsu|Fujitsu ScanSnap iX1600|ScanSnap Manager"
+    "Ricoh|Ricoh IM C4500|Ricoh Scan Router"
+    "Konica Minolta|Konica Minolta bizhub C250i|bizhub Scan Service"
+    "HP|HP LaserJet Enterprise MFP M776z|HP Scan Extended"
+    "Canon|Canon iR-ADV DX C5840i|imageRUNNER ADVANCE"
+    "Xerox|Xerox AltaLink C8130|Xerox AltaLink Service"
+    "Epson|Epson WorkForce DS-30000|Epson Document Capture"
+    "Kyocera|Kyocera ECOSYS M3645dn|Kyocera Quick Scan"
+    "Brother|Brother ADS-4700W|Brother ControlCenter4"
 )
 
 export DISPLAY="${DISPLAY:-:0}"
@@ -39,7 +39,7 @@ log_notify() {
     elif [[ "$TYPE" == "error" ]]; then notify-send -u critical -i "dialog-error" "PDF Optimizer Error" "$MSG" 2>/dev/null; fi
 }
 
-log_notify "=== СТАРТ v3.5.3: $DPI DPI, Файлов: $# ==="
+log_notify "=== СТАРТ v3.6.0: $DPI DPI, Файлов: $# ==="
 
 for INPUT_FILE in "$@"; do
     if [ ! -f "$INPUT_FILE" ]; then continue; fi
@@ -72,7 +72,7 @@ for INPUT_FILE in "$@"; do
     BRAND=$(echo $SELECTED_PROFILE | cut -d'|' -f1)
     RAND_PROD=$(echo $SELECTED_PROFILE | cut -d'|' -f2)
     RAND_CREA=$(echo $SELECTED_PROFILE | cut -d'|' -f3)
-    TITLES=("Scanned Document" "Scan" "Doc" "Document" "Scan_$(date +%Y)")
+    TITLES=("Scanned Document" "Scan" "Doc" "Document" "Scan_2026")
     RAND_TITL=${TITLES[$RANDOM % ${#TITLES[@]}]}
 
     T_DIR="/tmp/pdfopt_$(date +%s)_$BASENAME"
