@@ -1,6 +1,6 @@
 # 📜 Changelog (История изменений)
 
-## [3.2.0] - 2026-01-19
+## [3.3.1] - 2026-01-19
 ### Added
 - **Universal Trellis Mimic**: The scientific compression engine (Lanczos + Resize 95% + Unsharp) is now applied to **ALL** quality presets (75, 150, 200, 300 DPI) for maximum efficiency and clarity.
 - **Resource Management**: Standardized memory limits across all modes to ensure stability with large documents.
