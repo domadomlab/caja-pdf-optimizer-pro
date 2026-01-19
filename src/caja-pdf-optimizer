@@ -1,7 +1,7 @@
 #!/bin/bash
 # ==============================================================================
 # Caja PDF Optimizer Pro (Linux Edition)
-# Version: 3.1.1
+# Version: 3.1.2
 # ==============================================================================
 # Requirements: imagemagick, ghostscript, libreoffice, libnotify-bin
 # ==============================================================================
@@ -47,7 +47,7 @@ for cmd in convert gs libreoffice notify-send; do
     fi
 done
 
-log_notify "=== СТАРТ v3.1.1: $DPI DPI, Файлов: $# ==="
+log_notify "=== СТАРТ v3.1.2: $DPI DPI, Файлов: $# ==="
 
 for INPUT_FILE in "$@"; do
     if [ ! -f "$INPUT_FILE" ]; then continue; fi
@@ -88,9 +88,12 @@ for INPUT_FILE in "$@"; do
     log_notify "Оптимизация: $FILENAME ($DPI DPI)"
 
     # Основная команда ImageMagick
+    # Добавляем лимиты ресурсов для предотвращения "cache resources exhausted"
+    IM_LIMITS="-limit memory 1GiB -limit map 2GiB"
+
     if [ "$DPI" == "030" ] || [ "$DPI" == "30" ]; then
         # Extreme Mode (Quality 40)
-        convert -density 150 -units PixelsPerInch "$WORKING_FILE" \
+        convert $IM_LIMITS -density 150 -units PixelsPerInch "$WORKING_FILE" \
                 -alpha remove -alpha off \
                 -filter Lanczos -distort Resize 95% \
                 -unsharp 0x0.5 \
@@ -103,7 +106,7 @@ for INPUT_FILE in "$@"; do
                 "$OUTPUT_FILE" >> "$LOG_FILE" 2>&1
     elif [ "$DPI" == "150" ]; then
         # Scientific Email Mode (Trellis Mimic + Quality 70)
-        convert -density 150 -units PixelsPerInch "$WORKING_FILE" \
+        convert $IM_LIMITS -density 150 -units PixelsPerInch "$WORKING_FILE" \
                 -alpha remove -alpha off \
                 -filter Lanczos -distort Resize 95% \
                 -unsharp 0x0.5 \
@@ -116,7 +119,7 @@ for INPUT_FILE in "$@"; do
                 "$OUTPUT_FILE" >> "$LOG_FILE" 2>&1
     else
         # Other Standard Modes (Eco, Print, High)
-        convert -density "$DPI" -units PixelsPerInch "$WORKING_FILE" \
+        convert $IM_LIMITS -density "$DPI" -units PixelsPerInch "$WORKING_FILE" \
                 -alpha remove -alpha off \
                 -sampling-factor 4:2:0 \
                 -compress jpeg -quality 70 \

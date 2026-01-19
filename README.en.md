@@ -1,10 +1,10 @@
-# Caja PDF Optimizer Pro 🚀 (Linux Edition) v3.1.1
+# Caja PDF Optimizer Pro 🚀 (Linux Edition) v3.1.2
 
 **Professional tool for PDF compression and document conversion directly from the Caja context menu.**
 
 ---
 
-## ✨ New in Version 3.1.1
+## ✨ New in Version 3.1.2
 
 *   **📘 Word Support:** Convert `.docx`, `.doc`, and `.odt` to optimized PDF with one click (powered by LibreOffice).
 *   **🕵️ Camouflage Mode:** Strips real metadata and injects random scanner signatures (HP, Canon, Xerox, etc.). Your digital files look like hardware scans.
@@ -30,7 +30,7 @@
 1.  Download the latest `.deb` package from [Releases](https://github.com/domadomlab/caja-pdf-optimizer-pro/releases).
 2.  Install it:
     ```bash
-    sudo apt install ./caja-pdf-optimizer_3.1.1_all.deb
+    sudo apt install ./caja-pdf-optimizer_3.1.2_all.deb
     ```
 3.  Restart Caja:
     ```bash
