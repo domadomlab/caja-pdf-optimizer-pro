@@ -1,4 +1,4 @@
-# Caja PDF Optimizer Pro 🚀 (Linux Edition) v3.0.1
+# Caja PDF Optimizer Pro 🚀 (Linux Edition) v3.1.0
 
 [🇷🇺 Русский](README.md) | [🇺🇸 English](README.en.md)
 
@@ -41,7 +41,7 @@ JPEG 4:2:0 subsampling and optimized Quality 70 settings for maximum size reduct
 1.  Download the latest `.deb` package from [Releases](https://github.com/domadomlab/caja-pdf-optimizer-pro/releases).
 2.  Install it:
     ```bash
-    sudo apt install ./caja-pdf-optimizer_3.0.1_all.deb
+    sudo apt install ./caja-pdf-optimizer_3.1.0_all.deb
     ```
 3.  Restart Caja:
     ```bash

@@ -27,6 +27,7 @@
 
 | Mode | DPI | Use Case |
 | :--- | :--- | :--- |
+| **PDF: Extreme** | 30 | **Satellite / GPRS** (Minimum Size) |
 | **PDF: Eco** | 75 | **Web / Email** (Maximum compression) |
 | **PDF: Email** | 150 | **Office / Standard** (Balanced) |
 | **PDF: Print** | 200 | **Archive / High** (Important docs) |

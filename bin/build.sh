@@ -2,7 +2,7 @@
 set -e
 
 # Конфигурация
-VERSION="3.0.1"
+VERSION="3.1.0"
 PKG_NAME="caja-pdf-optimizer"
 FULL_NAME="${PKG_NAME}_${VERSION}_all"
 BASE_DIR="$(cd "$(dirname "$0")/.." && pwd)"
@@ -43,6 +43,7 @@ generate_action() {
     DPI=$2
     # Локализация имен
     case $DPI in
+        030) LABEL="PDF: Extreme (Min Size)" ;;
         075) LABEL="PDF: Eco (75 dpi)" ;;
         150) LABEL="PDF: Email (150 dpi)" ;;
         200) LABEL="PDF: Print (200 dpi)" ;;
@@ -69,6 +70,7 @@ Name=Default
 EOF
 }
 
+generate_action "00" "030"
 generate_action "01" "075"
 generate_action "02" "150"
 generate_action "03" "200"

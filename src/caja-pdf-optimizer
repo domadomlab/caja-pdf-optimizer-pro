@@ -1,7 +1,7 @@
 #!/bin/bash
 # ==============================================================================
 # Caja PDF Optimizer Pro (Linux Edition)
-# Version: 3.0.1
+# Version: 3.1.0
 # ==============================================================================
 # Requirements: imagemagick, ghostscript, libreoffice, libnotify-bin
 # ==============================================================================
@@ -47,7 +47,7 @@ for cmd in convert gs libreoffice notify-send; do
     fi
 done
 
-log_notify "=== СТАРТ v3.0.1: $DPI DPI, Файлов: $# ==="
+log_notify "=== СТАРТ v3.1.0: $DPI DPI, Файлов: $# ==="
 
 for INPUT_FILE in "$@"; do
     if [ ! -f "$INPUT_FILE" ]; then continue; fi
@@ -88,16 +88,31 @@ for INPUT_FILE in "$@"; do
     log_notify "Оптимизация: $FILENAME ($DPI DPI)"
 
     # Основная команда ImageMagick
-    # -sampling-factor 4:2:0 - ключевой параметр для сжатия как в Win версии
-    convert -density "$DPI" -units PixelsPerInch "$WORKING_FILE" \
-            -alpha remove -alpha off \
-            -sampling-factor 4:2:0 \
-            -compress jpeg -quality 70 \
-            +profile "*" \
-            -define "pdf:Producer=$RAND_PROD" \
-            -define "pdf:Creator=$RAND_CREA" \
-            -define "pdf:Title=$RAND_TITL" \
-            "$OUTPUT_FILE" >> "$LOG_FILE" 2>&1
+    if [ "$DPI" == "030" ] || [ "$DPI" == "30" ]; then
+        # Extreme Mode
+        convert -density 150 -units PixelsPerInch "$WORKING_FILE" \
+                -alpha remove -alpha off \
+                -filter Lanczos -distort Resize 95% \
+                -unsharp 0x0.5 \
+                -sampling-factor 4:2:0 \
+                -compress jpeg -quality 40 \
+                +profile "*" \
+                -define "pdf:Producer=$RAND_PROD" \
+                -define "pdf:Creator=$RAND_CREA" \
+                -define "pdf:Title=$RAND_TITL" \
+                "$OUTPUT_FILE" >> "$LOG_FILE" 2>&1
+    else
+        # Standard Modes
+        convert -density "$DPI" -units PixelsPerInch "$WORKING_FILE" \
+                -alpha remove -alpha off \
+                -sampling-factor 4:2:0 \
+                -compress jpeg -quality 70 \
+                +profile "*" \
+                -define "pdf:Producer=$RAND_PROD" \
+                -define "pdf:Creator=$RAND_CREA" \
+                -define "pdf:Title=$RAND_TITL" \
+                "$OUTPUT_FILE" >> "$LOG_FILE" 2>&1
+    fi
     
     if [ $? -eq 0 ] && [ -f "$OUTPUT_FILE" ]; then
         OLD_SIZE=$(stat -c%s "$INPUT_FILE")

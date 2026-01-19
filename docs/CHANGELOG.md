@@ -1,12 +1,11 @@
 # 📜 Changelog (История изменений)
 
-## [3.0.1] - 2026-01-19
-### Fixed
-*   **Syntax Error:** Removed extra parentheses in metadata generation logic that prevented the script from running.
-*   **Deep Cleanup:** Improved `postinst` script to aggressively remove legacy `gimp*` and `optimize_pdf*` menu entries from all system and user directories.
-*   **Stability:** Added better error handling for LibreOffice conversion.
+## [3.1.0] - 2026-01-19
+### Added
+*   **Extreme Mode (Min Size):** New scientific compression preset using Trellis-Quantization Mimic.
+*   **Optimized Pipeline:** Updated ImageMagick core logic for better SSIM results.
 
-## [3.0.0] - 2026-01-19
+## [3.0.1] - 2026-01-19
 ### Added
 *   **Word to PDF Conversion:** Added silent conversion for `.docx`, `.doc`, and `.odt` files using LibreOffice headless mode.
 *   **Camouflage Mode:** Implemented fake scanner metadata injection (HP, Canon, Xerox, etc.) to match the Windows version features.
