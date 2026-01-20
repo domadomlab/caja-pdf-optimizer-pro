@@ -1,14 +1,30 @@
+# 📜 Changelog (История изменений)
+
+## [3.6.3] - 2026-01-20 (LTS Industrial)
+### Critical Fixes
+- **Dependencies**: Added `poppler-utils` to mandatory dependencies (required for `pdfinfo`/`pdfseparate`).
+- **Menu Compatibility**: Implemented dual-path registration (`/usr/share/file-manager/actions/` AND `/usr/share/caja-actions/actions/`) to ensure visibility on all MATE versions.
+
+## [3.6.2] - 2026-01-20
+### Advanced Engine
+- **Signal Recovery**: Integrated `Despeckle` + `Enhance` filters into the core pipeline.
+- **Performance**: Achieved ~20% better compression ratio on standard documents due to noise removal before quantization.
+
+## [3.6.1] - 2026-01-20
+### Fixed
+- **Dependencies**: Enforced `caja-extensions-common` and `caja-actions` logic.
+- **Documentation**: Clarified that the Scientific Engine applies to ALL DPI modes.
+
+## [3.6.0] - 2026-01-20
+### Features
+- **Global Profiles**: Updated masking database with 2025 scanner models.
+- **Memory**: Increased ImageMagick limits (1GiB RAM / 2GiB Map) to prevent "cache resources exhausted".
+- **Portable Architecture**: Refined standalone script logic.
+
 ## [3.5.2] - 2026-01-19
 ### Changed
 - **Project Optimization**: Removed all binary artifacts from the repository. Cleaned up build scripts and unified the documentation format.
 - **Stability**: Confirmed parallel processing reliability on multi-page documents.
-
-# 📜 Changelog (История изменений)
-
-## [3.5.2] - 2026-01-19
-### Added
-- **Universal Trellis Mimic**: The scientific compression engine (Lanczos + Resize 95% + Unsharp) is now applied to **ALL** quality presets (75, 150, 200, 300 DPI) for maximum efficiency and clarity.
-- **Resource Management**: Standardized memory limits across all modes to ensure stability with large documents.
 
 ## [3.1.2] - 2026-01-19
 ### Added

@@ -6,7 +6,7 @@ if which update-desktop-database >/dev/null 2>&1; then
     update-desktop-database -q /usr/share/applications
 fi
 
-echo "Configuring Caja PDF Optimizer v3.0.0..."
+echo "Configuring Caja PDF Optimizer Pro v3.6.3..."
 
 # 2. СИСТЕМНАЯ ОЧИСТКА (Legacy Cleanup)
 # Удаляем старые версии из системных директорий, которые могли остаться от v1.x
@@ -39,6 +39,6 @@ if which caja >/dev/null 2>&1; then
 fi
 
 echo "---------------------------------------------------------"
-echo "Caja PDF Optimizer v3.0.0 installed successfully!"
+echo "Caja PDF Optimizer Pro v3.6.3 installed successfully!"
 echo "Documentation available at: /usr/share/doc/caja-pdf-optimizer/README.md"
 echo "---------------------------------------------------------"

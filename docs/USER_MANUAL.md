@@ -1,4 +1,4 @@
-# 📘 Руководство пользователя
+# 📘 Caja PDF Optimizer Pro - User Manual (v3.6.3 LTS Industrial)
 > **Caja PDF Optimizer Suite v3.0.1**
 
 ## ⚙️ Установка
