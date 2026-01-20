@@ -2,7 +2,7 @@
 set -e
 
 # Конфигурация
-VERSION="3.6.2"
+VERSION="3.6.3"
 PKG_NAME="caja-pdf-optimizer"
 FULL_NAME="${PKG_NAME}_${VERSION}_all"
 BASE_DIR="$(cd "$(dirname "$0")/.." && pwd)"
@@ -17,6 +17,7 @@ rm -rf "$BUILD_DIR"
 mkdir -p "$BUILD_DIR/$FULL_NAME/DEBIAN"
 mkdir -p "$BUILD_DIR/$FULL_NAME/usr/bin"
 mkdir -p "$BUILD_DIR/$FULL_NAME/usr/share/file-manager/actions"
+mkdir -p "$BUILD_DIR/$FULL_NAME/usr/share/caja-actions/actions"
 mkdir -p "$BUILD_DIR/$FULL_NAME/usr/share/doc/$PKG_NAME"
 
 # 2. Копирование скриптов
@@ -70,6 +71,8 @@ MimeTypes=application/pdf;application/msword;application/vnd.openxmlformats-offi
 Exec=/usr/bin/caja-pdf-optimizer $DPI %F
 Name=Default
 EOF
+
+    cp "$BUILD_DIR/$FULL_NAME/usr/share/file-manager/actions/$NAME" "$BUILD_DIR/$FULL_NAME/usr/share/caja-actions/actions/$NAME"
 }
 
 generate_action "00" "030"

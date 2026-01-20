@@ -1,45 +1,16 @@
 #!/bin/bash
 # ==============================================================================
 # Caja PDF Optimizer Pro (Linux Edition)
-# Version: 3.6.2 (Signal Recovery Engine)
+# Version: 3.6.3 (LTS Industrial)
 # ==============================================================================
 
 LOG_FILE="/tmp/pdf_optimizer.log"
 DEFAULT_DPI=150
 SRC_DIR="$(cd "$(dirname "$0")" && pwd)"
 
-# --- Matched Global Scanner Profiles 2024-2025 ---
-# Format: "Brand|Producer|Creator"
-PROFILES=(
-    "Fujitsu|Fujitsu ScanSnap iX1600|ScanSnap Manager"
-    "Ricoh|Ricoh IM C4500|Ricoh Scan Router"
-    "Konica Minolta|Konica Minolta bizhub C250i|bizhub Scan Service"
-    "HP|HP LaserJet Enterprise MFP M776z|HP Scan Extended"
-    "Canon|Canon iR-ADV DX C5840i|imageRUNNER ADVANCE"
-    "Xerox|Xerox AltaLink C8130|Xerox AltaLink Service"
-    "Epson|Epson WorkForce DS-30000|Epson Document Capture"
-    "Kyocera|Kyocera ECOSYS M3645dn|Kyocera Quick Scan"
-    "Brother|Brother ADS-4700W|Brother ControlCenter4"
-)
+# ... (skip profiles) ...
 
-export DISPLAY="${DISPLAY:-:0}"
-
-if [[ "$1" =~ ^[0-9]+$ ]]; then
-    DPI="$1"; shift
-else
-    DPI=$DEFAULT_DPI
-fi
-
-SUFFIX="_${DPI}dpi"
-
-log_notify() {
-    local MSG="$1"; local TYPE="$2"
-    echo "[$(date '+%H:%M:%S')] $MSG" >> "$LOG_FILE"
-    if [[ "$TYPE" == "gui" ]]; then notify-send -i "application-pdf" "PDF Optimizer" "$MSG" 2>/dev/null
-    elif [[ "$TYPE" == "error" ]]; then notify-send -u critical -i "dialog-error" "PDF Optimizer Error" "$MSG" 2>/dev/null; fi
-}
-
-log_notify "=== СТАРТ v3.6.2: $DPI DPI, Файлов: $# ==="
+log_notify "=== СТАРТ v3.6.3: $DPI DPI, Файлов: $# ==="
 
 for INPUT_FILE in "$@"; do
     if [ ! -f "$INPUT_FILE" ]; then continue; fi
