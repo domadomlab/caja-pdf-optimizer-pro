@@ -1,4 +1,4 @@
-# Caja PDF Optimizer Pro 🚀 (Linux Edition) v3.6.0 LTS
+# Caja PDF Optimizer Pro 🚀 (Linux Edition) v3.6.1 LTS
 
 <p align="center">
   <img src="logo.png" width="400" alt="Caja PDF Optimizer Pro Logo">
@@ -17,7 +17,7 @@
 
 ### 🔬 Universal Scientific Engine (New in v3.6.0)
 **Trellis-Quantization Mimic** is now applied to ALL modes. Uses **Lanczos filtering** and **adaptive 95% resizing** to remove digital noise and sharpen text.
-*Научное сжатие во всех режимах (75-300 DPI). Удаление шума матрицы и интеллектуальная упаковка JPEG.*
+*Научное сжатие во всех режимах (30-300 DPI). Удаление шума матрицы и интеллектуальная упаковка JPEG.*
 
 ### 📘 Word & Office Support
 Convert `.docx`, `.doc`, and `.odt` to optimized PDF with one click (powered by LibreOffice).
