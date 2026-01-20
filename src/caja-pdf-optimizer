@@ -1,7 +1,7 @@
 #!/bin/bash
 # ==============================================================================
 # Caja PDF Optimizer Pro (Linux Edition)
-# Version: 3.6.1 (Dependency Fix)
+# Version: 3.6.2 (Signal Recovery Engine)
 # ==============================================================================
 
 LOG_FILE="/tmp/pdf_optimizer.log"
@@ -39,7 +39,7 @@ log_notify() {
     elif [[ "$TYPE" == "error" ]]; then notify-send -u critical -i "dialog-error" "PDF Optimizer Error" "$MSG" 2>/dev/null; fi
 }
 
-log_notify "=== СТАРТ v3.6.1: $DPI DPI, Файлов: $# ==="
+log_notify "=== СТАРТ v3.6.2: $DPI DPI, Файлов: $# ==="
 
 for INPUT_FILE in "$@"; do
     if [ ! -f "$INPUT_FILE" ]; then continue; fi
@@ -93,6 +93,7 @@ EOF
         for page in "$T_DIR"/p-*.pdf; do
             opt_page="$T_DIR/opt-$(basename "$page")"
             convert $IM_LIMITS -density "$READ_DPI" -units PixelsPerInch "$page" \
+                    -despeckle -enhance \
                     -alpha remove -alpha off -filter Lanczos -distort Resize 95% \
                     -unsharp 0x0.5 -sampling-factor 4:2:0 -compress jpeg -quality $QUALITY \
                     +profile "*" "$opt_page" >> "$LOG_FILE" 2>&1 &
@@ -104,6 +105,7 @@ EOF
     else
         OPT_SINGLE="$T_DIR/opt_single.pdf"
         convert $IM_LIMITS -density "$READ_DPI" -units PixelsPerInch "$WORKING_FILE" \
+                -despeckle -enhance \
                 -alpha remove -alpha off -filter Lanczos -distort Resize 95% \
                 -unsharp 0x0.5 -sampling-factor 4:2:0 -compress jpeg -quality $QUALITY \
                 +profile "*" "$OPT_SINGLE" >> "$LOG_FILE" 2>&1

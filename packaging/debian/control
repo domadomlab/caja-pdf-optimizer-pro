@@ -1,17 +1,17 @@
 Package: caja-pdf-optimizer
-Version: 3.6.1
+Version: 3.6.2
 Section: utils
 Priority: optional
 Architecture: all
 Depends: caja, imagemagick, ghostscript, libnotify-bin, libreoffice, bash, caja-extensions-common, caja-actions
 Maintainer: Dom <user@localhost>
-Description: Professional PDF Optimizer Suite for Caja (v3.6.1 LTS)
+Description: Professional PDF Optimizer Suite for Caja (v3.6.2 LTS)
  The Ultimate PDF Compression & Conversion Tool for MATE Desktop Environment.
  .
+ Changes in v3.6.2:
+  - Advanced Engine Upgrade: Integrated 'Signal Recovery' (Despeckle + Enhance).
+  - Improved noise reduction for better JPEG compression ratios.
  Changes in v3.6.1:
-  - Critical fix: Enforced 'caja-extensions-common' AND 'caja-actions' as mandatory dependencies.
-  - Improved dependency resolution logic in .deb package.
- Changes in v3.6.0:
   - Fixed "cache resources exhausted" error by increasing ImageMagick memory limits.
   - Scientific "Trellis-Quantization Mimic" applied to ALL DPI modes.
   - Added support for MS Word (.docx, .doc) and ODT files.

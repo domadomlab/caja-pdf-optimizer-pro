@@ -1,4 +1,4 @@
-# Caja PDF Optimizer Pro 🚀 (Linux Edition) v3.6.1 LTS
+# Caja PDF Optimizer Pro 🚀 (Linux Edition) v3.6.2 LTS
 
 <p align="center">
   <img src="logo.png" width="400" alt="Caja PDF Optimizer Pro Logo">
