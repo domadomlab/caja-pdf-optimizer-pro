@@ -1,13 +1,21 @@
 Package: caja-pdf-optimizer
-Version: 3.6.3
+Version: 3.6.6
 Section: utils
 Priority: optional
 Architecture: all
 Depends: caja, imagemagick, ghostscript, poppler-utils, libnotify-bin, libreoffice, bash, caja-extensions-common, caja-actions
 Maintainer: Dom <user@localhost>
-Description: Professional PDF Optimizer Suite for Caja (v3.6.3 LTS)
+Description: Professional PDF Optimizer Suite for Caja (v3.6.6 LTS)
  The Ultimate PDF Compression & Conversion Tool for MATE Desktop Environment.
  .
+ Changes in v3.6.6:
+  - Final Menu Fix: Relocated actions to /usr/share/caja-actions/actions/ to resolve duplicate entries on systems with both native and plugin support.
+ Changes in v3.6.5:
+  - Fix: Removed duplicate menu entries caused by dual registration logic.
+  - Optimization: Streamlined installation path to /usr/share/file-manager/actions/ only.
+ Changes in v3.6.4:
+  - Hotfix: Resolved critical bash script error ("command not found: log_notify") causing instant crash.
+  - Stability: Reordered function definitions.
  Changes in v3.6.3:
   - Critical fix: Added 'poppler-utils' to mandatory dependencies (required for pdfinfo/pdfseparate).
   - Improved menu compatibility: Dual registration in /usr/share/file-manager/actions and /usr/share/caja-actions.
