@@ -1,4 +1,4 @@
-# Caja PDF Optimizer Pro 🚀 (Linux Edition) v3.6.2 LTS
+# Caja PDF Optimizer Pro 🚀 (Linux Edition) v3.6.7 LTS
 
 <p align="center">
   <img src="logo.png" width="400" alt="Caja PDF Optimizer Pro Logo">
@@ -46,7 +46,7 @@ Strips real metadata and injects random scanner signatures.
 1.  Download the latest `.deb` package from [Releases](https://github.com/domadomlab/caja-pdf-optimizer-pro/releases).
 2.  Install it:
     ```bash
-    sudo apt install ./caja-pdf-optimizer_3.5.2_all.deb
+    sudo apt install ./caja-pdf-optimizer_3.6.7_all.deb
     ```
 3.  Restart Caja:
     ```bash

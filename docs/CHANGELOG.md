@@ -1,3 +1,8 @@
+## [3.6.7] - 2026-01-31
+### HOTFIX
+- **Menu Restore**: Reverted actions installation path to `/usr/share/file-manager/actions/`. This fixes the missing context menu issue on standard Caja installations.
+- **Cleanup**: `postinst` script now automatically removes broken menu entries from v3.6.6.
+
 # 📜 Changelog (История изменений)
 
 ## [3.6.3] - 2026-01-20 (LTS Industrial)

@@ -6,12 +6,15 @@ if which update-desktop-database >/dev/null 2>&1; then
     update-desktop-database -q /usr/share/applications
 fi
 
-echo "Configuring Caja PDF Optimizer Pro v3.6.3..."
+echo "Configuring Caja PDF Optimizer Pro v3.6.7..."
 
 # 2. СИСТЕМНАЯ ОЧИСТКА (Legacy Cleanup)
 # Удаляем старые версии из системных директорий, которые могли остаться от v1.x
 rm -f /usr/share/file-manager/actions/gimp*.desktop
 rm -f /usr/share/file-manager/actions/optimize_pdf_*.desktop
+
+# Очистка ошибочных путей от v3.6.6
+rm -f /usr/share/caja-actions/actions/opt_pdf_*.desktop
 
 # 3. ПОЛЬЗОВАТЕЛЬСКАЯ ОЧИСТКА (User Cleanup)
 # Проходим по всем пользователям и чистим их локальные папки действий
@@ -39,6 +42,6 @@ if which caja >/dev/null 2>&1; then
 fi
 
 echo "---------------------------------------------------------"
-echo "Caja PDF Optimizer Pro v3.6.3 installed successfully!"
+echo "Caja PDF Optimizer Pro v3.6.7 installed successfully!"
 echo "Documentation available at: /usr/share/doc/caja-pdf-optimizer/README.md"
 echo "---------------------------------------------------------"
